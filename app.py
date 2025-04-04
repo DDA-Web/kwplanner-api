@@ -1,39 +1,36 @@
 from flask import Flask, request, jsonify
-import os
-from kwplanner import keyword_ideas
 from google.ads.googleads.client import GoogleAdsClient
+from kwplanner import keyword_ideas
+import os
 
 app = Flask(__name__)
 
-# Charger les identifiants depuis les variables d'environnement
-credentials = {
-    "developer_token": os.environ.get("GOOGLE_ADS_DEVELOPER_TOKEN"),
-    "client_id": os.environ.get("GOOGLE_ADS_CLIENT_ID"),
-    "client_secret": os.environ.get("GOOGLE_ADS_CLIENT_SECRET"),
-    "refresh_token": os.environ.get("GOOGLE_ADS_REFRESH_TOKEN"),
-    "login_customer_id": os.environ.get("GOOGLE_ADS_LOGIN_CUSTOMER_ID"),
-    "use_proto_plus": True,
-    "token_uri": os.environ.get("GOOGLE_ADS_TOKEN_URI")
-}
+@app.route("/keywords", methods=["GET"])
+def get_keywords():
+    query = request.args.get("q")
+    if not query:
+        return jsonify({"error": "Paramètre 'q' manquant."}), 400
 
-# Initialiser le client Google Ads
-client = GoogleAdsClient.load_from_dict(credentials)
-
-# Définir les paramètres fixes
-LOCATION_IDS = [1000]  # France
-LANGUAGE_ID = 1000     # Français
-
-@app.route("/kwplanner", methods=["GET"])
-def run_kwplanner():
-    keyword = request.args.get("keyword")
-    if not keyword:
-        return jsonify({"error": "Paramètre 'keyword' manquant"}), 400
+    credentials = {
+        "developer_token": os.getenv("DEVELOPER_TOKEN"),
+        "client_id": os.getenv("CLIENT_ID"),
+        "client_secret": os.getenv("CLIENT_SECRET"),
+        "refresh_token": os.getenv("REFRESH_TOKEN"),
+        "use_proto_plus": True,
+        "login_customer_id": os.getenv("LOGIN_CUSTOMER_ID")
+    }
 
     try:
-        results = keyword_ideas(client, credentials["login_customer_id"], LOCATION_IDS, LANGUAGE_ID, [keyword])
-        return jsonify(results)
+        client = GoogleAdsClient.load_from_dict(credentials)
+        customer_id = os.getenv("CUSTOMER_ID")
+        location_ids = ["2250"]
+        language_id = "1002"
+
+        resultats = keyword_ideas(client, customer_id, location_ids, language_id, [query])
+        return jsonify(resultats)
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 8080)))
+    app.run()
