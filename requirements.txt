@@ -2,3 +2,4 @@ Flask==2.3.3
 google-ads==22.0.0
 grpcio==1.62.1
 protobuf==4.25.3
+googleapis-common-protos==1.62.0

@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 from google.ads.googleads.client import GoogleAdsClient
 from kwplanner import keyword_ideas
 import os
+os.environ["GRPC_VERBOSITY"] = "DEBUG"
+os.environ["GRPC_TRACE"] = "all"
 
 app = Flask(__name__)
 
