@@ -1,5 +1,3 @@
-Mon app.py
-
 from flask import Flask, request, jsonify
 from google.ads.googleads.client import GoogleAdsClient
 from kwplanner import keyword_ideas
