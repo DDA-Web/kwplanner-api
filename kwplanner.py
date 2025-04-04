@@ -1,5 +1,5 @@
 from google.ads.googleads.client import GoogleAdsClient
-from google.ads.googleads.v14.enums.types import KeywordPlanNetworkEnum
+from google.ads.googleads.v14.enums import KeywordPlanNetworkEnum
 
 CUSTOMER_ID = "9240222537"  # Ton ID client Google Ads
 
