@@ -21,17 +21,16 @@ def get_keywords():
     }
 
     try:
-        client = GoogleAdsClient.load_from_dict(credentials)
+        client = GoogleAdsClient.load_from_dict(credentials, version="v14")
         customer_id = os.getenv("CUSTOMER_ID")
         location_ids = ["2250"]  # France
         language_id = "1002"     # Français
 
-        resultats = keyword_ideas(client, customer_id, location_ids, language_id, [query])
-        return jsonify(resultats)
+        results = keyword_ideas(client, customer_id, location_ids, language_id, [query])
+        return jsonify(results)
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    import os
     app.run(host="0.0.0.0", port=int(os.getenv("PORT", 8080)))
