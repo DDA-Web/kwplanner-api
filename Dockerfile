@@ -1,29 +1,25 @@
-# Utilise une image Python officielle
-FROM python:3.12-slim
+# Utilise une image Python légère avec les outils nécessaires
+FROM python:3.11-slim
 
-# Empêche les buffers sur les logs
-ENV PYTHONUNBUFFERED=1
-
-# Crée un répertoire de travail
-WORKDIR /app
-
-# Copie les fichiers nécessaires
-COPY requirements.txt .
-
-# Installe les dépendances système minimales
+# Installe les dépendances système nécessaires à grpcio
 RUN apt-get update && apt-get install -y \
+    gcc \
     build-essential \
+    python3-dev \
+    libssl-dev \
+    libffi-dev \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Installe les dépendances Python
-RUN pip install --upgrade pip && pip install -r requirements.txt
+# Copie les fichiers
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
-# Copie le reste des fichiers
 COPY . .
 
-# Définit le port d'écoute
+# Expose le port
 EXPOSE 8080
 
-# Démarre l'application Flask
+# Lance l'app Flask
 CMD ["python", "app.py"]
