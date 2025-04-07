@@ -11,15 +11,15 @@ def get_keywords():
     if not query:
         return jsonify({"error": "Paramètre 'q' manquant."}), 400
 
-credentials = {
-    "developer_token": os.getenv("GOOGLE_ADS_DEVELOPER_TOKEN"),
-    "client_id": os.getenv("GOOGLE_ADS_CLIENT_ID"),
-    "client_secret": os.getenv("GOOGLE_ADS_CLIENT_SECRET"),
-    "refresh_token": os.getenv("GOOGLE_ADS_REFRESH_TOKEN"),
-    "token_uri": os.getenv("GOOGLE_ADS_TOKEN_URI"),
-    "login_customer_id": os.getenv("GOOGLE_ADS_LOGIN_CUSTOMER_ID"),
-    "use_proto_plus": True
-}
+    credentials = {
+        "developer_token": os.getenv("GOOGLE_ADS_DEVELOPER_TOKEN"),
+        "client_id": os.getenv("GOOGLE_ADS_CLIENT_ID"),
+        "client_secret": os.getenv("GOOGLE_ADS_CLIENT_SECRET"),
+        "refresh_token": os.getenv("GOOGLE_ADS_REFRESH_TOKEN"),
+        "token_uri": os.getenv("GOOGLE_ADS_TOKEN_URI"),
+        "login_customer_id": os.getenv("GOOGLE_ADS_LOGIN_CUSTOMER_ID"),
+        "use_proto_plus": True
+    }
 
     try:
         client = GoogleAdsClient.load_from_dict(credentials)
